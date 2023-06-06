@@ -1,0 +1,20 @@
+.itemSocial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-width: 1px;
+    border-radius: 0.5rem;
+    padding-bottom: 0.625rem;
+    padding-top: 0.625rem;
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    font-size: .875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+}
+.logoGoogle {
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-right: 0.5rem;
+}
