@@ -7,15 +7,8 @@ import { useRouter } from 'next/router';
 const AdminPage = () => {
   const router = useRouter();
   const { profile, error, login, logout } = useAdminAuth();
-  
+  // const user = profile.data.data
 
-  useEffect(() => {
-    if (!profile) {
-      router.push('/admin/login');
-    }
-  }, [router, profile]);
-
-  console.log({ profile });
   return (
     <div>
       <h1>hello, </h1>

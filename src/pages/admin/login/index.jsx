@@ -1,9 +1,9 @@
 import EmptyLayout from "@/components/layout/empty";
 import styles from "./page.module.css";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useRouter } from "next/router";
+import Cookies from "js-cookie";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 
 const validationSchema = Yup.object().shape({
@@ -18,16 +18,16 @@ function AdminLogin() {
   const { error, login } = useAdminAuth({
     revalidateOnMount: false,
   });
-
-  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+ 
 
   const handleSubmit = async (values) => {
-    try {
-      await login(values);
-      router.push("/admin");
-    } catch (error) {
-      router.push("/admin/login");
-    }
+    setLoading(true)
+    await login(values);
+    setLoading(false)
+     
+     console.log({error});
+
 
     // Add your sign-in logic here, such as making an API request
   };
@@ -133,7 +133,8 @@ function AdminLogin() {
                       type="submit"
                       className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
                     >
-                      Sign in
+                      {loading && <div>Loading...</div> || 'Sign in'}
+                      {/* Sign in */}
                     </button>
                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                       Don’t have an account yet?{" "}

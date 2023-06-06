@@ -6,7 +6,6 @@ import classroomApi from "../../../api-client/classroom-api";
 function ClassRoom(props) {
     const classrooms = props.classrooms
 
-
     return (
         <div>
             <table>
@@ -49,6 +48,7 @@ export async function getStaticProps() {
     try {
         const response = await classroomApi.getListClassroom();
         const data = await response.data;
+        console.log(data.data);
         return {
             props: {
                 classrooms: data.data,
