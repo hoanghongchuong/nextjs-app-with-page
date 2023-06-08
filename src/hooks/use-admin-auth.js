@@ -23,27 +23,35 @@ export function useAdminAuth(options) {
   const firstLoading = profile === undefined && error === undefined;
 
   async function login(payload) {
-    // const response = await authApi.login(payload);
-    // await mutate();
-    // return response;
-    
-    try {
-      const response = await authApi.login(payload);
-      if (response.status == 200) {
+    const response = await authApi.login(payload);
+        if (response.status == 200) {
         const admin_token = response.data.data.access_token;
         Cookies.set("admin_token", admin_token, {
-          // httpOnly: true,
           expires: 60 * 60 * 1000,
         });
         // saveTokenToLocalStorage('admin_token', admin_token)
         await mutate();
-        router.push("/admin");
-      } else {
-        throw new Error("Đăng nhập không thành công");
       }
-    } catch (error) {
-      throw new Error(error.message);
-    }
+    // return response;
+
+    console.log('eorororr:::>> ', error);
+    
+    // try {
+    //   const response = await authApi.login(payload);
+    //   if (response.status == 200) {
+    //     const admin_token = response.data.data.access_token;
+    //     Cookies.set("admin_token", admin_token, {
+    //       expires: 60 * 60 * 1000,
+    //     });
+    //     // saveTokenToLocalStorage('admin_token', admin_token)
+    //     await mutate();
+    //     router.push("/admin");
+    //   } else {
+    //     throw new Error("Đăng nhập không thành công");
+    //   }
+    // } catch (error) {
+    //   throw new Error(error.message);
+    // }
   }
 
   async function logout() {

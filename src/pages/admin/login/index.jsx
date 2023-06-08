@@ -5,6 +5,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import Cookies from "js-cookie";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
+import { useRouter } from "next/router";
+import { toast } from "react-toastify";
+import { FaSpinner } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("Email is required").email("Invalid email"),
@@ -18,16 +21,22 @@ function AdminLogin() {
   const { error, login } = useAdminAuth({
     revalidateOnMount: false,
   });
-  const [loading, setLoading] = useState(false)
- 
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (values) => {
-    setLoading(true)
-    await login(values);
-    setLoading(false)
-     
-     console.log({error});
-
+    try {
+      setLoading(true);
+      await login(values);
+      setLoading(false);
+      router.push("/admin");
+    } catch (error) {
+      setLoading(false);
+      toast.error(error.message);
+    }
+    // setLoading(true)
+    // await login(values);
+    // setLoading(false)
 
     // Add your sign-in logic here, such as making an API request
   };
@@ -131,10 +140,14 @@ function AdminLogin() {
                     </div>
                     <button
                       type="submit"
-                      className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                      className={` flex justify-center gap-2 w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 
+                      `} 
+                      disabled={loading ? true : false}
                     >
-                      {loading && <div>Loading...</div> || 'Sign in'}
-                      {/* Sign in */}
+                      
+                      
+                      {loading ? <FaSpinner className="text-lg animate-spin" /> : '' }
+                      Sign in
                     </button>
                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                       Don’t have an account yet?{" "}
