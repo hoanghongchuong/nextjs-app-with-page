@@ -1,18 +1,17 @@
 import { getTokenFromLocalStorage } from "@/utils/localStorage";
 import axios from "axios";
-import Cookies from "js-cookie";
 
 const axiosClient = axios.create({
   baseURL: "http://localhost:8001/api",
-  withCredentials: true,
+  withCredentials: false,
   headers: {
     "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest"
   },
 });
 
 axiosClient.interceptors.request.use(function (config) {
-//   const adminToken = getTokenFromLocalStorage("admin_token");
-  const adminToken = Cookies.get('admin_token');
+  const adminToken = getTokenFromLocalStorage("admin_token");
   // Gắn token vào header Authorization
   if (adminToken) {
     config.headers.Authorization = `Bearer ${adminToken}`;

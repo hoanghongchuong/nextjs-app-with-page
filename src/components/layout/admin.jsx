@@ -1,6 +1,7 @@
 import { useAdminAuth } from '@/hooks/use-admin-auth'
 import { useRouter } from 'next/router'
 import React, { useEffect } from 'react'
+import AdminSidebar from '../admin-comon/sidebar'
 
 function AdminLayout({children}) {
   const router = useRouter()
@@ -16,6 +17,7 @@ function AdminLayout({children}) {
 
   return (
     <div>
+      <AdminSidebar/>
         <h1>AdminLayout, {profile?.data?.data?.name}</h1>
         {children}
 

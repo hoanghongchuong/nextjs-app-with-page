@@ -3,11 +3,11 @@ import styles from "./page.module.css";
 import React, { useEffect, useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import Cookies from "js-cookie";
 import { useAdminAuth } from "@/hooks/use-admin-auth";
 import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 import { FaSpinner } from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("Email is required").email("Invalid email"),
@@ -22,7 +22,14 @@ function AdminLogin() {
     revalidateOnMount: false,
   });
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
+  const apiUrl = process.env.API_URL;
+  const dbHost = process.env.DB_HOST;
+
+  const handleTogglePassword = () => {
+    setShowPassword(!showPassword);
+  };
 
   const handleSubmit = async (values) => {
     try {
@@ -34,11 +41,6 @@ function AdminLogin() {
       setLoading(false);
       toast.error(error.message);
     }
-    // setLoading(true)
-    // await login(values);
-    // setLoading(false)
-
-    // Add your sign-in logic here, such as making an API request
   };
 
   return (
@@ -78,7 +80,7 @@ function AdminLogin() {
                         name="email"
                         id="email"
                         autoComplete="username"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        className="form-control"
                         placeholder="name@company.com"
                       />
                       <ErrorMessage
@@ -95,14 +97,23 @@ function AdminLogin() {
                       >
                         Password
                       </label>
-                      <Field
-                        type="password"
-                        name="password"
-                        id="password"
-                        placeholder="••••••••"
-                        className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        autoComplete="current-password"
-                      />
+                      <div className="relative">
+                        <Field
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          id="password"
+                          placeholder="••••••••"
+                          className="form-control pr-10"
+                          autoComplete="current-password"
+                        />
+                        <button
+                          type="button"
+                          className="focus:outline-none absolute top-1/2 right-2 transform -translate-y-1/2"
+                          onClick={handleTogglePassword}
+                        >
+                          {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </button>
+                      </div>
                       <ErrorMessage
                         name="password"
                         render={(msg) => (
@@ -141,12 +152,14 @@ function AdminLogin() {
                     <button
                       type="submit"
                       className={` flex justify-center gap-2 w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 
-                      `} 
+                      ${loading ? "disabled:opacity-75" : ""}`}
                       disabled={loading ? true : false}
                     >
-                      
-                      
-                      {loading ? <FaSpinner className="text-lg animate-spin" /> : '' }
+                      {loading ? (
+                        <FaSpinner className="text-lg animate-spin" />
+                      ) : (
+                        ""
+                      )}
                       Sign in
                     </button>
                     <p className="text-sm font-light text-gray-500 dark:text-gray-400">

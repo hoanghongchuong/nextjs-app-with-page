@@ -1,7 +1,6 @@
 import authApi from "@/api-client/auth-api";
 import axiosClient from "@/api-client/axios-client";
 import useSWR from "swr";
-import Cookies from "js-cookie";
 import { saveTokenToLocalStorage } from "@/utils/localStorage";
 import { useRouter } from "next/router";
 
@@ -26,32 +25,9 @@ export function useAdminAuth(options) {
     const response = await authApi.login(payload);
         if (response.status == 200) {
         const admin_token = response.data.data.access_token;
-        Cookies.set("admin_token", admin_token, {
-          expires: 60 * 60 * 1000,
-        });
-        // saveTokenToLocalStorage('admin_token', admin_token)
+        saveTokenToLocalStorage('admin_token', admin_token)
         await mutate();
-      }
-    // return response;
-
-    console.log('eorororr:::>> ', error);
-    
-    // try {
-    //   const response = await authApi.login(payload);
-    //   if (response.status == 200) {
-    //     const admin_token = response.data.data.access_token;
-    //     Cookies.set("admin_token", admin_token, {
-    //       expires: 60 * 60 * 1000,
-    //     });
-    //     // saveTokenToLocalStorage('admin_token', admin_token)
-    //     await mutate();
-    //     router.push("/admin");
-    //   } else {
-    //     throw new Error("Đăng nhập không thành công");
-    //   }
-    // } catch (error) {
-    //   throw new Error(error.message);
-    // }
+      }    
   }
 
   async function logout() {
